@@ -1,10 +1,10 @@
 [package]
 name = "asession"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["adlsdztony <zzl0712@connect.hku.hk>"]
 license = "MIT OR Apache-2.0"
-description = "A session with cookies"
+description = "a user-friendly Client wrapper"
 readme = "README.md"
 homepage = "https://github.com/adlsdztony/asession"
 repository = "https://github.com/adlsdztony/asession"
@@ -12,8 +12,8 @@ keywords = ["session", "cookie", "http"]
 
 
 [dependencies]
-cookie_store = '0.19.0'
-reqwest_cookie_store = '0.5'
+cookie_store = '0.20.0'
+reqwest_cookie_store = '0.6.0'
 log = "0.4"
 anyhow = "1.0"
 reqwest = { version = "0.11", features = ["json", "cookies"] }

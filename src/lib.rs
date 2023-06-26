@@ -8,6 +8,7 @@ use std::ops::Deref;
 use std::path::PathBuf;
 use std::sync::Arc;
 
+/// a builder to build a session
 pub struct SessionBuilder {
     cookie_store_path: Option::<PathBuf>,
 }
@@ -19,6 +20,7 @@ impl SessionBuilder {
         }
     }
 
+    /// set path to store cookies
     pub fn cookies_store_into(mut self, cookie_store_path: PathBuf) -> SessionBuilder {
         self.cookie_store_path = Some(cookie_store_path);
         self
@@ -40,10 +42,8 @@ pub struct Session {
 }
 
 impl Session {
+
     /// Try to creates a new `Session` instance, and load cookies from `cookie_store_path`.
-    /// When `Session` is dropped(more specifically, when `State` is dropped), it will store cookies
-    /// to `cookie_store_path`.
-    
     pub fn try_new(cookie_store_path: Option<PathBuf>) -> anyhow::Result<Session> {
         let mut headers = reqwest::header::HeaderMap::new();
         headers.insert("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.0.0".parse().unwrap());
@@ -59,6 +59,7 @@ impl Session {
         Ok(Session { state, client })
     }
 
+    /// Get the cookie store of this session.
     pub fn get_cookie_store(&self) -> Arc<CookieStoreMutex> {
         self.state.cookie_store.clone()
     }
@@ -72,7 +73,7 @@ impl Deref for Session {
 }
 
 #[derive(Debug)]
-struct State {
+pub struct State {
     cookie_store_path: Option<PathBuf>,
     cookie_store: Arc<CookieStoreMutex>,
 }
@@ -118,6 +119,7 @@ impl State {
 }
 
 impl Drop for State {
+    /// When `State` is dropped, store cookies to `cookie_store_path`.
     fn drop(&mut self) {
         if self.cookie_store_path.is_none() {
             return;

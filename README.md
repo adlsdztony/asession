@@ -1,4 +1,5 @@
-# A session with cookies
+# asession 
+a user-friendly Client wrapper, which automatically handles cookies and load/store cookies from/to the specified path.
 
 ## usage
 ```rust
