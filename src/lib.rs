@@ -64,6 +64,7 @@ impl Session {
         self.state.cookie_store.clone()
     }
 
+    /// store cookies manully 
     pub fn store_cookie(&self, cookie_store_path: PathBuf) {
         let mut file = match fs::OpenOptions::new()
             .write(true)
