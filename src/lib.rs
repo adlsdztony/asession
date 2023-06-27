@@ -63,6 +63,34 @@ impl Session {
     pub fn get_cookie_store(&self) -> Arc<CookieStoreMutex> {
         self.state.cookie_store.clone()
     }
+
+    pub fn store_cookie(&self, cookie_store_path: PathBuf) {
+        let mut file = match fs::OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(&cookie_store_path)
+        {
+            Ok(f) => f,
+            Err(e) => {
+                error!(
+                    "open {} for write failed. error: {}",
+                    cookie_store_path.display(),
+                    e
+                );
+                return;
+            }
+        };
+
+        let store = self.state.cookie_store.lock().unwrap();
+        if let Err(e) = store.save_json(&mut file) {
+            error!(
+                "save cookies to path {} failed. error: {}",
+                cookie_store_path.display(),
+                e
+            );
+        }
+    }
 }
 
 impl Deref for Session {
